@@ -7,6 +7,7 @@ on:
 jobs:
   scan:
     runs-on: ubuntu-latest
+    environment: SONAR
 
     steps:
       - name: Checkout code
