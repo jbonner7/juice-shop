@@ -11,38 +11,18 @@ on:
 
 jobs:
   zap_scan:
-    name: ZAP Scan
     runs-on: ubuntu-latest
-
-    services:
-      juice-shop:
-        image: bkimminich/juice-shop:v15.3.0
-        ports:
-          - 3000:3000
-        options: >-
-          --health-cmd="curl -s http://localhost:3000" 
-          --health-interval=10s 
-          --health-timeout=5s 
-          --health-retries=10
-
+    name: Scan Juice Shop preview instance on Heroku
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Wait for Juice Shop to become available
-        run: |
-          echo "Waiting for Juice Shop to start on port 3000..."
-          for i in {1..30}; do
-            if curl -s http://localhost:3000 > /dev/null; then
-              echo "Juice Shop is up!"
-              break
-            fi
-            echo "Still waiting..."
-            sleep 5
-          done
-
-      - name: Run OWASP ZAP Baseline Scan
-        uses: zaproxy/action-baseline@v0.10.0
+      - name: Check out Git repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 #v4.2.2
         with:
-          target: 'http://localhost:3000'
+          ref: develop
+      - name: ZAP Scan
+        uses: zaproxy/action-baseline@7c4deb10e6261301961c86d65d54a516394f9aed # v0.14.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          target: 'https://preview.owasp-juice.shop'
+          rules_file_name: '.zap/rules.tsv'
+          cmd_options: '-a -j'
           fail_action: false  # Do not fail the workflow on alerts; set to true if you want to block PRs
