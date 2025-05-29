@@ -9,7 +9,7 @@ on:
 jobs:
   sonarqube:
     runs-on: ubuntu-latest
-
+    environment: SONAR
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -41,5 +41,5 @@ jobs:
             -Dsonar.projectKey=juice-shop-copy \
             -Dsonar.sources=. \
             -Dsonar.host.url=http://sonarqubealb-1699436304.us-east-2.elb.amazonaws.com \
-            -Dsonar.login=$SONAR_TOKEN
+            -Dsonar.token=$SONAR_TOKEN
 
