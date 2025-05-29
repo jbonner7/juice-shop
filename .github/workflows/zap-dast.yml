@@ -1,7 +1,8 @@
 name: ZAP Baseline DAST Scan
 
 on:
-  branches:
+  push:
+    branches:
       - master
   pull_request:
     branches:
