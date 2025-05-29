@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v4.2.2
-        with:
+
       - name: ZAP Scan
         uses: zaproxy/action-baseline@v0.14.0
         with:

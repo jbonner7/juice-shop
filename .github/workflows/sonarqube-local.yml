@@ -3,11 +3,11 @@ name: SonarQube Scan
 on:
   push:
     branches:
-      - master
+      #- master
   pull_request:
     branches:
-      - master
-      - dev
+      #- master
+      #- dev
 
 jobs:
   sonarqube:
