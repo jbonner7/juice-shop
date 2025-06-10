@@ -3,11 +3,12 @@ name: SonarQube Scan
 on:
   push:
     branches:
-      #- master
+      - master
+      - dev
   pull_request:
     branches:
-      #- master
-      #- dev
+      - master
+      - dev
 
 jobs:
   sonarqube:
@@ -21,7 +22,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
-          java-version: '17'  # match your project
+          java-version: '17'
 
       - name: Cache SonarQube packages
         uses: actions/cache@v3
@@ -37,6 +38,7 @@ jobs:
           echo "/opt/sonar-scanner/bin" >> $GITHUB_PATH
 
       - name: Run SonarQube Scanner
+        id: scan
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
@@ -46,3 +48,14 @@ jobs:
             -Dsonar.host.url=http://sonarqubealb-1699436304.us-east-2.elb.amazonaws.com \
             -Dsonar.token=$SONAR_TOKEN
 
+          # Extract ceTaskId from the generated report
+          echo "ceTaskId=$(grep ceTaskId .scannerwork/report-task.txt | cut -d'=' -f2)" >> $GITHUB_OUTPUT
+
+      - name: Wait for SonarQube Quality Gate result
+        uses: sonarsource/sonarqube-quality-gate-action@v1.1.0
+        with:
+          sonarHostUrl: http://sonarqubealb-1699436304.us-east-2.elb.amazonaws.com
+          projectKey: juice-shop-copy
+          ceTaskId: ${{ steps.scan.outputs.ceTaskId }}
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
