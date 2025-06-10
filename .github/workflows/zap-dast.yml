@@ -1,14 +1,14 @@
 name: ZAP DAST Scan on Juice Shop
 
-on:
-  push:
-    branches:
-      - master
-  pull_request:
-    branches:
-      - master
-      - dev
-      - qa
+# Temporarily disable all triggers
+# on:
+#   push:
+#     branches:
+#       - master
+#   pull_request:
+#     branches:
+#       - master
+#       - dev
 
 jobs:
   zap_scan:

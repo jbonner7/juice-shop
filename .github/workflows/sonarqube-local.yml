@@ -1,13 +1,14 @@
 name: SonarQube Scan
 
-on:
-  push:
-    branches:
-      #- master
-  pull_request:
-    branches:
-      #- master
-      #- dev
+# Temporarily disable all triggers
+# on:
+#   push:
+#     branches:
+#       - master
+#   pull_request:
+#     branches:
+#       - master
+#       - dev
 
 jobs:
   sonarqube:
